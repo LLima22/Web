@@ -1,0 +1,72 @@
+<div class="container">
+    <nav class="navbar navbar-dark navbar-expand-lg bg-primary mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Web</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Cadastrar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/views/layouts/consulta.handlebars">Consultar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <p class="fs-5">Cadastrar Clientes</p>
+    <p class="fs-6">Sistema Utilizado para agendamento de serviços.</p>
+    {{#if clientes}}
+        <form class="row g-3" method="POST" action="/editar/{{clientes.id}}">
+            <h5 class="fw-bold">Atualizar dados de Cadastro</h5>
+            <div class="col-md-12">
+                <label class="form-label" for="nome">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite seu nome" value="{{clientes.nome}}">
+            </div>
+            <div class="col-md-12">
+                <label class="form-label" for="cep">CEP</label>
+                <input type="text" class="form-control" id="cep" name="cep" placeholder="Digite seu cep" value="{{clientes.cep}}" onblur="buscarCep()">
+            </div>
+            <div class="col-md-12">
+                <label class="form-label" for="endereco">Endereco</label>
+                <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Digite seu endereco" value="{{clientes.endereco}}">
+            </div>
+            <div class="col-md-12">
+                <label class="form-label" for="bairro">Bairro</label>
+                <input type="text" class="form-control" id="bairro" name="bairro" placeholder="Digite seu bairro" value="{{clientes.bairro}}">
+            </div>
+            <div class="col-md-12">
+                <label class="form-label" for="cidade">Cidade</label>
+                <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Digite sua cidade" value="{{clientes.cidade}}">
+            </div>
+            <div class="col-md-12">
+                <label class="form-label" for="estado">Estado</label>
+                <input type="text" class="form-control" id="estado" name="estado" placeholder="Digite seu estado" value="{{clientes.estado}}">
+            </div>
+            <div class="col-12 d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Atualizar</button>
+            </div>
+        </form>
+        <script>
+            function buscarCep() {
+                const cep = document.getElementById('cep').value;
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('endereco').value = data.logradouro;
+                    document.getElementById('bairro').value = data.bairro;
+                    document.getElementById('cidade').value = data.localidade;
+                    document.getElementById('estado').value = data.uf;
+                })
+                .catch(error => console.error('Erro ao buscar CEP:', error));
+            }
+        </script>
+    {{else}}
+        <p>Agendamento não encontrado.</p>
+    {{/if}}
+</div>
